@@ -6,16 +6,11 @@ import {
   HeartFilled,
   ShoppingCartOutlined
 } from "@ant-design/icons"
-
 import { getProductById } from "../../services/products"
 import { addFavorite, removeFavorite, getFavorites } from "../../services/favorites"
-
 import type { Product } from "../../types/Product"
-
-import ProductPageSkeleton from "../../components/ProductSkeleton/ProductPageSkeleton"
-
+import ProductPageSkeleton from "../../components/Skeleton/ProductPageSkeleton"
 import { useCartStore } from "../../store/cartStore"
-
 import { useRef, useState, useEffect } from "react"
 
 const { useBreakpoint } = Grid
@@ -53,6 +48,13 @@ export default function ProductPage() {
     if (id) {
       loadFavorites()
     }
+  }, [id])
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: "auto"
+    })
   }, [id])
 
   if (isLoading) return <ProductPageSkeleton />
