@@ -1,4 +1,4 @@
-import { Carousel, Skeleton } from "antd"
+import { Carousel } from "antd"
 import { useQuery } from "@tanstack/react-query"
 import { getHeroes } from "../../services/heroes"
 import type { Hero } from "../../types/Hero"
@@ -12,13 +12,13 @@ export default function Hero() {
 
   if (isLoading) {
     return (
-      <Skeleton.Image
-        active
+      <div
         style={{
           width: "100%",
           height: 360,
           borderRadius: 12,
-          marginBottom: 24
+          marginBottom: 24,
+          background: "#e5e5e5"
         }}
       />
     )
@@ -54,6 +54,7 @@ export default function Hero() {
                 color: "#fff"
               }}
             >
+              {/* opcional: título */}
             </div>
           </div>
         </div>

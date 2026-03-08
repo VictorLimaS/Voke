@@ -4,7 +4,7 @@ import Hero from "../../components/Hero/Hero"
 import Categories from "../../components/Categories/Categories"
 import { Row, Col, Grid } from "antd"
 import ProductCard from "../../components/ProductCard/ProductCard"
-import ProductSkeleton from "../../components/ProductSkeleton/ProductSkeleton"
+import ProductSkeleton from "../../components/Skeleton/ProductSkeleton"
 import { getProducts } from "../../services/products"
 import type { Product } from "../../types/Product"
 

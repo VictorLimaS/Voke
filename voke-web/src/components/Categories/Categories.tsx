@@ -2,7 +2,7 @@ import { Row, Col, Typography, Grid } from "antd"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { getCategories } from "../../services/categories"
-import CategorySkeleton from "../ProductSkeleton/CategorySkeleton"
+import CategorySkeleton from "../Skeleton/CategorySkeleton"
 
 const { Title, Text } = Typography
 const { useBreakpoint } = Grid
