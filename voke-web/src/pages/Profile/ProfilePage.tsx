@@ -7,7 +7,7 @@ import {
   Button,
   Divider,
   Space,
-  Spin
+  Skeleton
 } from "antd"
 
 import {
@@ -86,7 +86,6 @@ export default function ProfilePage() {
   const logout = () => {
 
     localStorage.removeItem("token")
-
     window.location.href = "/"
 
   }
@@ -94,9 +93,122 @@ export default function ProfilePage() {
   if (loading) {
 
     return (
-      <div style={{ padding: 40, textAlign: "center" }}>
-        <Spin size="large" />
+
+      <div
+        style={{
+          maxWidth: 1200,
+          margin: "40px auto",
+          padding: "0 20px"
+        }}
+      >
+
+        <Row gutter={24}>
+
+          <Col xs={24} md={7}>
+
+            <Card style={{ borderRadius: 12 }}>
+
+              <Space direction="vertical" align="center" style={{ width: "100%" }}>
+
+                <Skeleton.Avatar active size={90} shape="circle" />
+
+                <Skeleton active title={{ width: 120 }} paragraph={false} />
+
+                <Skeleton active title={{ width: 180 }} paragraph={false} />
+
+                <Divider />
+
+                <Skeleton.Button active block size="large" />
+
+              </Space>
+
+            </Card>
+
+          </Col>
+
+          <Col xs={24} md={17}>
+
+            {/* Endereços Skeleton */}
+
+            <Card style={{ marginBottom: 24, borderRadius: 12 }}>
+
+              <Skeleton active title={{ width: 200 }} paragraph={false} />
+
+              <Row gutter={[16,16]} style={{ marginTop: 20 }}>
+
+                {[1,2].map((i)=>(
+                  <Col xs={24} md={12} key={i}>
+                    <Card>
+                      <Skeleton active paragraph={{ rows: 3 }} />
+                    </Card>
+                  </Col>
+                ))}
+
+              </Row>
+
+            </Card>
+
+            {/* Carrinho Skeleton */}
+
+            <Card style={{ marginBottom: 24, borderRadius: 12 }}>
+
+              <Skeleton active title={{ width: 200 }} paragraph={false} />
+
+              <Space
+                direction="vertical"
+                style={{ width: "100%", marginTop: 20 }}
+              >
+
+                {[1,2].map((i)=>(
+                  <Card key={i} size="small">
+                    <Row align="middle" gutter={16}>
+                      <Col>
+                        <Skeleton.Avatar shape="square" size={70} active />
+                      </Col>
+                      <Col flex="auto">
+                        <Skeleton active paragraph={false} />
+                      </Col>
+                    </Row>
+                  </Card>
+                ))}
+
+              </Space>
+
+            </Card>
+
+            {/* Favoritos Skeleton */}
+
+            <Card style={{ borderRadius: 12 }}>
+
+              <Skeleton active title={{ width: 200 }} paragraph={false} />
+
+              <Row gutter={[16,16]} style={{ marginTop: 20 }}>
+
+                {[1,2,3,4].map((i)=>(
+                  <Col xs={24} md={12} key={i}>
+                    <Card>
+                      <Row align="middle" gutter={12}>
+                        <Col>
+                          <Skeleton.Avatar shape="square" size={60} active />
+                        </Col>
+                        <Col flex="auto">
+                          <Skeleton active paragraph={false} />
+                        </Col>
+                      </Row>
+                    </Card>
+                  </Col>
+                ))}
+
+              </Row>
+
+            </Card>
+
+          </Col>
+
+        </Row>
+
       </div>
+
     )
 
   }
@@ -170,10 +282,7 @@ export default function ProfilePage() {
             }}
           >
 
-            <Space
-              align="center"
-              style={{ marginBottom: 20 }}
-            >
+            <Space align="center" style={{ marginBottom: 20 }}>
               <HomeOutlined />
               <Title level={4} style={{ margin: 0 }}>
                 Meus Endereços
@@ -246,10 +355,7 @@ export default function ProfilePage() {
             }}
           >
 
-            <Space
-              align="center"
-              style={{ marginBottom: 20 }}
-            >
+            <Space align="center" style={{ marginBottom: 20 }}>
               <ShoppingCartOutlined />
               <Title level={4} style={{ margin: 0 }}>
                 Itens no Carrinho
@@ -326,10 +432,7 @@ export default function ProfilePage() {
 
           <Card style={{ borderRadius: 12 }}>
 
-            <Space
-              align="center"
-              style={{ marginBottom: 20 }}
-            >
+            <Space align="center" style={{ marginBottom: 20 }}>
               <HeartOutlined />
               <Title level={4} style={{ margin: 0 }}>
                 Produtos Favoritos
