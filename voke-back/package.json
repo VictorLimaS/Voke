@@ -10,8 +10,10 @@
     "prisma": "^5.22.0"
   },
   "scripts": {
-    "dev": "ts-node-dev --respawn --transpile-only src/server.ts"
-  },
+  "dev": "ts-node-dev src/server.ts",
+  "build": "tsc",
+  "start": "node dist/server.js"
+},
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
     "@types/cors": "^2.8.19",
