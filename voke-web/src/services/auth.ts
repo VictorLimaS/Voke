@@ -1,4 +1,4 @@
-const API_URL = "http://localhost:3000/api"
+const API_URL = import.meta.env.VITE_API_URL 
 
 export const loginUser = async (email: string, password: string) => {
   const response = await fetch(`${API_URL}/auth/login`, {
@@ -7,14 +7,14 @@ export const loginUser = async (email: string, password: string) => {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ email, password })
-  })
+  });
 
   if (!response.ok) {
-    throw new Error("Credenciais inválidas")
+    throw new Error("Credenciais inválidas");
   }
 
-  return response.json()
-}
+  return response.json();
+};
 
 export const registerUser = async (
   name: string,
@@ -27,11 +27,11 @@ export const registerUser = async (
       "Content-Type": "application/json"
     },
     body: JSON.stringify({ name, email, password })
-  })
+  });
 
   if (!response.ok) {
-    throw new Error("Erro ao criar conta")
+    throw new Error("Erro ao criar conta");
   }
 
-  return response.json()
-}
+  return response.json();
+};

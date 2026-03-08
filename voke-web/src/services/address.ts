@@ -1,37 +1,11 @@
-const API_URL = import.meta.env.VITE_API_URL
+import { api } from "./api"
 
-export const loginUser = async (email: string, password: string) => {
-  const response = await fetch(`${API_URL}/auth/login`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ email, password })
-  });
+export async function createAddress(data: any) {
+  const res = await api.post("/api/addresses", data)
+  return res.data
+}
 
-  if (!response.ok) {
-    throw new Error("Credenciais inválidas");
-  }
-
-  return response.json();
-};
-
-export const registerUser = async (
-  name: string,
-  email: string,
-  password: string
-) => {
-  const response = await fetch(`${API_URL}/users`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, email, password })
-  });
-
-  if (!response.ok) {
-    throw new Error("Erro ao criar conta");
-  }
-
-  return response.json();
-};
+export async function getMyAddresses() {
+  const res = await api.get("/api/addresses/me")
+  return res.data
+}
