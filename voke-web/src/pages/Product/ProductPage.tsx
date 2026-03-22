@@ -21,9 +21,7 @@ export default function ProductPage() {
   const isMobile = screens.md === false
 
   const addToCart = useCartStore((state) => state.addToCart)
-
   const imageRef = useRef<HTMLImageElement>(null)
-
   const [favorite, setFavorite] = useState(false)
 
   const { data: product, isLoading } = useQuery<Product>({
@@ -36,40 +34,48 @@ export default function ProductPage() {
     const loadFavorites = async () => {
       try {
         const favorites = await getFavorites()
-        const exists = favorites.some(
-          (f: any) => f.product?.id === id
-        )
+        const exists = favorites.some((f: any) => f.product?.id === id)
         setFavorite(exists)
       } catch (error) {
         console.error(error)
       }
     }
-
-    if (id) {
-      loadFavorites()
-    }
+    if (id) loadFavorites()
   }, [id])
 
   useEffect(() => {
-    window.scrollTo({
-      top: 0,
-      behavior: "auto"
-    })
+    window.scrollTo({ top: 0, behavior: "auto" })
   }, [id])
 
-  if (isLoading) return <ProductPageSkeleton />
+  if (isLoading || !product) return <ProductPageSkeleton />
 
-  if (!product) return <div>Produto não encontrado</div>
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
+    const x = ((e.pageX - left) / width) * 100
+    const y = ((e.pageY - top) / height) * 100
+    
+    const img = e.currentTarget.querySelector("img")
+    if (img) {
+      img.style.transformOrigin = `${x}% ${y}%`
+      img.style.transform = "scale(2)"
+    }
+  }
+
+  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
+    const img = e.currentTarget.querySelector("img")
+    if (img) {
+      img.style.transform = "scale(1)"
+      img.style.transformOrigin = "center"
+    }
+  }
 
   const animateToCart = () => {
     const img = imageRef.current
     const cart = document.querySelector(".cart-icon")
-
     if (!img || !cart) return
 
     const imgRect = img.getBoundingClientRect()
     const cartRect = cart.getBoundingClientRect()
-
     const clone = img.cloneNode(true) as HTMLImageElement
 
     clone.style.position = "fixed"
@@ -79,6 +85,7 @@ export default function ProductPage() {
     clone.style.height = `${imgRect.height}px`
     clone.style.transition = "all 0.7s cubic-bezier(.4,0,.2,1)"
     clone.style.zIndex = "9999"
+    clone.style.pointerEvents = "none"
 
     document.body.appendChild(clone)
 
@@ -94,7 +101,6 @@ export default function ProductPage() {
   }
 
   const toggleFavorite = async () => {
-    if (!product) return
     try {
       if (favorite) {
         await removeFavorite(product.id)
@@ -135,20 +141,34 @@ export default function ProductPage() {
             }}
           >
             {displayImages.map((img, index) => (
-              <img
+              <div
                 key={img.id}
-                ref={index === 0 ? imageRef : undefined}
-                src={img.url}
-                alt={product.name}
+                onMouseMove={!isMobile ? handleMouseMove : undefined}
+                onMouseLeave={!isMobile ? handleMouseLeave : undefined}
                 style={{
                   width: isMobile ? "80%" : "100%",
-                  height: isMobile ? 300 : 350,
+                  height: isMobile ? 300 : 450,
                   flexShrink: 0,
-                  objectFit: "cover",
                   borderRadius: 10,
-                  backgroundColor: "#f5f5f5"
+                  overflow: "hidden",
+                  backgroundColor: "#f5f5f5",
+                  cursor: "zoom-in",
+                  position: "relative"
                 }}
-              />
+              >
+                <img
+                  ref={index === 0 ? imageRef : undefined}
+                  src={img.url}
+                  alt={product.name}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                    transition: "transform 0.3s ease-out",
+                    pointerEvents: "none"
+                  }}
+                />
+              </div>
             ))}
           </div>
         </Col>
@@ -159,47 +179,27 @@ export default function ProductPage() {
               maxWidth: 420,
               display: "flex",
               flexDirection: "column",
-              gap: 20,
+              gap: 24,
               position: isMobile ? "static" : "sticky",
               top: 20,
               padding: isMobile ? "0 20px" : "0"
             }}
           >
             <div>
-              <h1
-                style={{
-                  fontSize: isMobile ? 24 : 28,
-                  fontWeight: 600,
-                  marginBottom: 8
-                }}
-              >
+              <h1 style={{ fontSize: isMobile ? 24 : 32, fontWeight: 600, marginBottom: 8 }}>
                 {product.name}
               </h1>
-
-              <span style={{ color: "#666", fontSize: 14 }}>
-                Categoria: {product.category?.name}
+              <span style={{ color: "#888", fontSize: 14, textTransform: "uppercase", letterSpacing: 1 }}>
+                {product.category?.name}
               </span>
             </div>
 
-            <div
-              style={{
-                fontSize: 26,
-                fontWeight: 700
-              }}
-            >
-              R${" "}
-              {product.price.toLocaleString("pt-BR", {
-                minimumFractionDigits: 2
-              })}
+            <div style={{ fontSize: 28, fontWeight: 700 }}>
+              R$ {product.price.toLocaleString("pt-BR", { minimumFractionDigits: 2 })}
             </div>
 
             {!isMobile && (
-              <div
-                style={{
-                  display: "flex",
-                  gap: 10
-                }}
-              >
+              <div style={{ display: "flex", gap: 12 }}>
                 <Button
                   type="primary"
                   size="large"
@@ -210,9 +210,11 @@ export default function ProductPage() {
                   }}
                   style={{
                     flex: 1,
-                    height: 48,
+                    height: 54,
                     borderRadius: 8,
                     backgroundColor: "#000",
+                    fontSize: 16,
+                    fontWeight: 500,
                     border: "none"
                   }}
                 >
@@ -224,10 +226,11 @@ export default function ProductPage() {
                   icon={favorite ? <HeartFilled /> : <HeartOutlined />}
                   onClick={toggleFavorite}
                   style={{
-                    width: 48,
-                    height: 48,
+                    width: 54,
+                    height: 54,
                     borderRadius: 8,
-                    color: favorite ? "red" : undefined
+                    color: favorite ? "#ff4d4f" : undefined,
+                    borderColor: favorite ? "#ff4d4f" : undefined
                   }}
                 />
               </div>
@@ -236,16 +239,13 @@ export default function ProductPage() {
             <Collapse
               ghost
               defaultActiveKey={["1"]}
+              expandIconPosition="end"
               items={[
                 {
                   key: "1",
-                  label: (
-                    <strong style={{ fontSize: 16 }}>
-                      Descrição do produto
-                    </strong>
-                  ),
+                  label: <strong style={{ fontSize: 16 }}>Descrição do produto</strong>,
                   children: (
-                    <p style={{ lineHeight: "1.6", color: "#444" }}>
+                    <p style={{ lineHeight: "1.8", color: "#666", fontSize: 15 }}>
                       {product.description}
                     </p>
                   )
@@ -264,11 +264,12 @@ export default function ProductPage() {
             left: 0,
             width: "100%",
             backgroundColor: "#fff",
-            padding: "16px",
+            padding: "16px 20px",
             borderTop: "1px solid #eee",
             display: "flex",
-            gap: 10,
-            zIndex: 1000
+            gap: 12,
+            zIndex: 1000,
+            boxShadow: "0 -4px 10px rgba(0,0,0,0.05)"
           }}
         >
           <Button
@@ -276,10 +277,10 @@ export default function ProductPage() {
             icon={favorite ? <HeartFilled /> : <HeartOutlined />}
             onClick={toggleFavorite}
             style={{
-              width: 48,
-              height: 48,
+              width: 50,
+              height: 50,
               borderRadius: 8,
-              color: favorite ? "red" : undefined
+              color: favorite ? "#ff4d4f" : undefined
             }}
           />
           <Button
@@ -292,13 +293,14 @@ export default function ProductPage() {
             }}
             style={{
               flex: 1,
-              height: 48,
+              height: 50,
               borderRadius: 8,
               backgroundColor: "#000",
-              border: "none"
+              border: "none",
+              fontWeight: 600
             }}
           >
-            Adicionar ao carrinho
+            Adicionar
           </Button>
         </div>
       )}

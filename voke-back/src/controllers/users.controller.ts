@@ -1,5 +1,4 @@
 import { Request, Response } from "express"
-import { AuthRequest } from "../middleware/auth"
 
 import {
   createUser,
@@ -10,7 +9,6 @@ import {
 export const create = async (req: Request, res: Response) => {
   try {
     const user = await createUser(req.body)
-
     res.json(user)
   } catch (error: any) {
     res.status(400).json({
@@ -22,7 +20,6 @@ export const create = async (req: Request, res: Response) => {
 export const list = async (req: Request, res: Response) => {
   try {
     const users = await getUsers()
-
     res.json(users)
   } catch {
     res.status(500).json({ error: "Erro ao buscar usuários" })
@@ -31,10 +28,9 @@ export const list = async (req: Request, res: Response) => {
 
 export const getOne = async (req: Request, res: Response) => {
   try {
-    const id =
-      typeof req.params.id === "string"
-        ? req.params.id
-        : undefined
+    const id = Array.isArray(req.params.id)
+  ? req.params.id[0]
+  : req.params.id
 
     if (!id) {
       return res.status(400).json({ error: "ID inválido" })
@@ -52,9 +48,9 @@ export const getOne = async (req: Request, res: Response) => {
   }
 }
 
-export const me = async (req: AuthRequest, res: Response) => {
+export const me = async (req: Request, res: Response) => {
   try {
-    const userId = req.user?.id as string
+    const userId = req.user?.id
 
     if (!userId) {
       return res.status(401).json({

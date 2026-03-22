@@ -7,14 +7,8 @@ interface JwtPayload {
   userId: string
 }
 
-export interface AuthRequest extends Request {
-  user?: {
-    id: string
-  }
-}
-
 export const authMiddleware = (
-  req: AuthRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -35,6 +29,6 @@ export const authMiddleware = (
 
     next()
   } catch {
-    res.status(401).json({ error: "Token inválido" })
+    return res.status(401).json({ error: "Token inválido" })
   }
 }

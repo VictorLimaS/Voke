@@ -1,5 +1,8 @@
 import { Router } from "express"
-import { createAddress, getMyAddresses } from "../controllers/address.controller"
+import {
+  createAddress,
+  getMyAddresses
+} from "../controllers/address.controller"
 import { authMiddleware } from "../middleware/auth"
 
 const router = Router()

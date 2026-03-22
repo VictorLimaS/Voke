@@ -1,10 +1,8 @@
-import { Response } from "express"
+import { Request, Response } from "express"
 import { prisma } from "../lib/prisma"
-import { AuthRequest } from "../middleware/auth"
 
-export const createAddress = async (req: AuthRequest, res: Response) => {
+export const createAddress = async (req: Request, res: Response) => {
   try {
-
     const userId = req.user?.id
 
     if (!userId) {
@@ -34,8 +32,6 @@ export const createAddress = async (req: AuthRequest, res: Response) => {
       }
     })
 
-    console.log("REQ USER:", req.user)
-
     if (saveCpf && cpf) {
       await prisma.user.update({
         where: { id: userId },
@@ -43,18 +39,14 @@ export const createAddress = async (req: AuthRequest, res: Response) => {
       })
     }
 
-    console.log("USER ID:", userId)
-
     res.json(address)
-
   } catch (error) {
     console.error(error)
     res.status(500).json({ error: "Erro ao salvar endereço" })
   }
 }
 
-
-export const getMyAddresses = async (req: AuthRequest, res: Response) => {
+export const getMyAddresses = async (req: Request, res: Response) => {
   try {
     const userId = req.user?.id
 
@@ -63,7 +55,9 @@ export const getMyAddresses = async (req: AuthRequest, res: Response) => {
     }
 
     const addresses = await prisma.address.findMany({
-      where: { userId },
+      where: {
+        userId
+      },
       orderBy: {
         createdAt: "desc"
       }

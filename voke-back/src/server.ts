@@ -9,6 +9,8 @@ import authRoutes from "./routes/auth"
 import addressRoutes from "./routes/address.routes"
 import favoriteRoutes from "./routes/favorites"
 
+import { authMiddleware } from "./middleware/auth"
+
 const app = express()
 
 app.use(cors())
@@ -17,11 +19,11 @@ app.use(express.json())
 app.use("/api/products", productRoutes)
 app.use("/api/categories", categoryRoutes)
 app.use("/api/heroes", heroRoutes)
-app.use("/api/users", usersRoutes)
 app.use("/api/auth", authRoutes)
-app.use("/api/addresses", addressRoutes)
-app.use("/api/favorites", favoriteRoutes)
 
+app.use("/api/users", authMiddleware, usersRoutes)
+app.use("/api/favorites", authMiddleware, favoriteRoutes)
+app.use("/api/addresses", authMiddleware, addressRoutes)
 
 app.get("/", (req, res) => {
   res.send("Voke API running 🚀")
