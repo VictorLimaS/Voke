@@ -108,7 +108,7 @@ export default function ProfilePage() {
 
             <Card style={{ borderRadius: 12 }}>
 
-              <Space direction="vertical" align="center" style={{ width: "100%" }}>
+              <Space orientation="vertical" align="center" style={{ width: "100%" }}>
 
                 <Skeleton.Avatar active size={90} shape="circle" />
 
@@ -128,8 +128,6 @@ export default function ProfilePage() {
 
           <Col xs={24} md={17}>
 
-            {/* Endereços Skeleton */}
-
             <Card style={{ marginBottom: 24, borderRadius: 12 }}>
 
               <Skeleton active title={{ width: 200 }} paragraph={false} />
@@ -148,14 +146,12 @@ export default function ProfilePage() {
 
             </Card>
 
-            {/* Carrinho Skeleton */}
-
             <Card style={{ marginBottom: 24, borderRadius: 12 }}>
 
               <Skeleton active title={{ width: 200 }} paragraph={false} />
 
               <Space
-                direction="vertical"
+                orientation="vertical"
                 style={{ width: "100%", marginTop: 20 }}
               >
 
@@ -175,8 +171,6 @@ export default function ProfilePage() {
               </Space>
 
             </Card>
-
-            {/* Favoritos Skeleton */}
 
             <Card style={{ borderRadius: 12 }}>
 
@@ -230,7 +224,7 @@ export default function ProfilePage() {
           <Card style={{ borderRadius: 12 }}>
 
             <Space
-              direction="vertical"
+              orientation="vertical"
               align="center"
               style={{ width: "100%" }}
             >
@@ -271,9 +265,7 @@ export default function ProfilePage() {
 
         </Col>
 
-
         <Col xs={24} md={17}>
-
 
           <Card
             style={{
@@ -346,8 +338,6 @@ export default function ProfilePage() {
 
           </Card>
 
-
-
           <Card
             style={{
               borderRadius: 12,
@@ -373,7 +363,7 @@ export default function ProfilePage() {
             ) : (
 
               <Space
-                direction="vertical"
+                orientation="vertical"
                 size="middle"
                 style={{ width: "100%" }}
               >
@@ -428,7 +418,6 @@ export default function ProfilePage() {
             )}
 
           </Card>
-
 
           <Card style={{ borderRadius: 12 }}>
 

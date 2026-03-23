@@ -8,11 +8,13 @@ export default function ProductSkeleton() {
         overflow: "hidden",
         boxShadow: "0 2px 8px rgba(0,0,0,0.05)"
       }}
-      bodyStyle={{
-        padding: 12,
-        display: "flex",
-        flexDirection: "column",
-        gap: 6
+      styles={{
+        body: {
+          padding: 12,
+          display: "flex",
+          flexDirection: "column",
+          gap: 6
+        }
       }}
       cover={
         <div

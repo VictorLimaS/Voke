@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom"
+import { useParams, useNavigate } from "react-router-dom"
 import { useQuery } from "@tanstack/react-query"
 import { Row, Col, Button, Collapse, Grid } from "antd"
 import {
@@ -11,14 +11,18 @@ import { addFavorite, removeFavorite, getFavorites } from "../../services/favori
 import type { Product } from "../../types/Product"
 import ProductPageSkeleton from "../../components/Skeleton/ProductPageSkeleton"
 import { useCartStore } from "../../store/cartStore"
+import { useAuthStore } from "../../store/authStore"
 import { useRef, useState, useEffect } from "react"
 
 const { useBreakpoint } = Grid
 
 export default function ProductPage() {
   const { id } = useParams()
+  const navigate = useNavigate()
   const screens = useBreakpoint()
   const isMobile = screens.md === false
+
+  const token = useAuthStore((state) => state.token)
 
   const addToCart = useCartStore((state) => state.addToCart)
   const imageRef = useRef<HTMLImageElement>(null)
@@ -40,8 +44,9 @@ export default function ProductPage() {
         console.error(error)
       }
     }
-    if (id) loadFavorites()
-  }, [id])
+
+    if (id && token) loadFavorites()
+  }, [id, token])
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" })
@@ -53,7 +58,7 @@ export default function ProductPage() {
     const { left, top, width, height } = e.currentTarget.getBoundingClientRect()
     const x = ((e.pageX - left) / width) * 100
     const y = ((e.pageY - top) / height) * 100
-    
+
     const img = e.currentTarget.querySelector("img")
     if (img) {
       img.style.transformOrigin = `${x}% ${y}%`
@@ -101,6 +106,11 @@ export default function ProductPage() {
   }
 
   const toggleFavorite = async () => {
+    if (!token) {
+      navigate("/login")
+      return
+    }
+
     try {
       if (favorite) {
         await removeFavorite(product.id)
@@ -239,7 +249,7 @@ export default function ProductPage() {
             <Collapse
               ghost
               defaultActiveKey={["1"]}
-              expandIconPosition="end"
+              expandIconPlacement="end"
               items={[
                 {
                   key: "1",

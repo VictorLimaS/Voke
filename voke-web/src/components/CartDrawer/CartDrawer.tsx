@@ -47,13 +47,10 @@ export default function CartDrawer({ open, onClose }: Props) {
     <Drawer
       title="Seu carrinho"
       placement="right"
-      width={isMobile ? "100%" : 380}
+      size={isMobile ? "default" : 380}
       open={open}
       onClose={onClose}
       getContainer={false}
-      style={{
-        height: isMobile ? "100vh" : undefined
-      }}
       styles={{
         body: {
           paddingBottom: 80,
